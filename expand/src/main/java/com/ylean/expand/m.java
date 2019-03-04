@@ -1,0 +1,176 @@
+package com.ylean.expand;
+
+import android.app.Application;
+import android.content.Context;
+import android.os.Build;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+
+import com.ylean.expand.floatwindow.interfaces.LayoutInitCallback;
+import com.ylean.expand.loading.model.LoadingM;
+import com.ylean.expand.network.MyOkHttp;
+import com.ylean.expand.network.cookie.ClearableCookieJar;
+import com.ylean.expand.network.cookie.PersistentCookieJar;
+import com.ylean.expand.network.cookie.cache.SetCookieCache;
+import com.ylean.expand.network.cookie.persistence.SharedPrefsCookiePersistor;
+
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+
+/**
+ * ================================================
+ * 作    者：maojunxian
+ * 版    本：1.0
+ * 创建日期：2017/3/6
+ * 描    述：框架控制器
+ * 修订历史：
+ * ================================================
+ */
+public class m {
+    private static m instance;
+    private LoadingM loadingM;
+    private View floatViewLayout;
+    private LayoutInitCallback callback;
+    private MyOkHttp netUtils;
+    private Application application;
+    private int widthPixels;
+    private int heightPixels;
+    private float density;
+    private int densityDpi;
+
+    private m() {
+        loadingM = new LoadingM();
+    }
+
+    public static m getInstance() {
+        if (instance == null) {
+            instance = new m();
+        }
+        return instance;
+    }
+
+    public MyOkHttp getNetUtils() {
+        if (netUtils == null) {
+            com.ylean.expand.utils.Log.e("------------> you dont init");
+        }
+        return netUtils;
+    }
+
+    public Application getApplication() {
+        return application;
+    }
+
+    /**
+     * 初始化debug
+     */
+    public m initDebug(boolean debug) {
+        com.ylean.expand.utils.Log.debug = debug;
+        return instance;
+    }
+
+    public m setApplication(Application application) {
+        this.application = application;
+        machineInformation();
+        return instance;
+    }
+
+
+    /**
+     * 初始化网络控制器
+     */
+    public m initNetWorkWithCookie(Context context) {
+        //持久化存储cookie
+        ClearableCookieJar cookieJar =
+                new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
+
+        //log拦截器
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        //自定义OkHttp
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
+                .readTimeout(10000L, TimeUnit.MILLISECONDS)
+                .cookieJar(cookieJar)       //设置开启cookie
+                .addInterceptor(logging)            //设置开启log
+                .build();
+        netUtils = new MyOkHttp(okHttpClient);
+        return instance;
+
+    }
+
+
+    /**
+     * 初始化网络控制器
+     */
+    public m initNetWorkDefault(Context context) {
+        return initNetWorkDefault(context, 10000l, 10000l);
+    }
+
+
+    /**
+     * 初始化网络控制器
+     */
+    public m initNetWorkDefault(Context context, long connetTimeout, long readTimeout) {
+        //自定义OkHttp
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(connetTimeout, TimeUnit.MILLISECONDS)
+                .readTimeout(readTimeout, TimeUnit.MILLISECONDS)
+                .build();
+        netUtils = new MyOkHttp(okHttpClient);
+        return instance;
+
+    }
+
+    public void machineInformation() {
+        DisplayMetrics metric = new DisplayMetrics();
+        ((WindowManager) application.getSystemService("window")).getDefaultDisplay().getMetrics(metric);
+        widthPixels = metric.widthPixels;
+        heightPixels = metric.heightPixels;
+        density = metric.density;
+        densityDpi = metric.densityDpi;
+        String value = "W = " + this.widthPixels + " H = " + this.heightPixels + " DENSITY = " + this.density + " DENSITYDPI = " + this.densityDpi + " VERSION = " + Build.VERSION.RELEASE;
+        com.ylean.expand.utils.Log.e(value);
+
+    }
+
+    public int getWidthPixels() {
+        return widthPixels;
+    }
+
+    public int getHeightPixels() {
+        return heightPixels;
+    }
+
+    public float getDensity() {
+        return density;
+    }
+
+    public int getDensityDpi() {
+        return densityDpi;
+    }
+
+    public LoadingM getLoadingM() {
+        return loadingM;
+    }
+
+    public View getFloatView() {
+        return floatViewLayout;
+    }
+
+    public void setFloatView(View floatViewLayout) {
+        this.floatViewLayout = floatViewLayout;
+    }
+
+    public LayoutInitCallback getCallback() {
+        return callback;
+    }
+
+    public void setCallback(LayoutInitCallback callback) {
+        this.callback = callback;
+    }
+}
