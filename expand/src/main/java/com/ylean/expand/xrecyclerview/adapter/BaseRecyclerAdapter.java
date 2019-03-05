@@ -25,7 +25,7 @@ import java.util.List;
 public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     protected List<T> list;
-    private FragmentActivity activity;
+    private  Activity activity;
     protected ViewGroup parent;
 
     private BaseHeadBean baseHeadBean;
@@ -126,11 +126,11 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
     }
 
 
-    public FragmentActivity getActivity() {
+    public  Activity getActivity() {
         return this.activity;
     }
 
-    public void setActivity(FragmentActivity activity) {
+    public void setActivity( Activity activity) {
         this.activity = activity;
     }
 
