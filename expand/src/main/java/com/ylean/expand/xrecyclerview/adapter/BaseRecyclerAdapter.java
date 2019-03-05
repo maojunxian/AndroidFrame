@@ -1,8 +1,7 @@
 package com.ylean.expand.xrecyclerview.adapter;
 
-import android.content.Context;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.util.SparseArrayCompat;
+import android.app.Activity;
+import android.content.Context; 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import java.util.List;
 public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     protected List<T> list;
-    private  Activity activity;
+    private Activity activity;
     protected ViewGroup parent;
 
     private BaseHeadBean baseHeadBean;
