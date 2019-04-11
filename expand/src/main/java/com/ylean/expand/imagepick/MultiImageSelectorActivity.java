@@ -88,7 +88,10 @@ public class MultiImageSelectorActivity extends AppCompatActivity
                         mFolderPopupWindow.dismiss();
                     } else {
                         mFolderPopupWindow.show();
-                        int index = mFolderAdapter.getSelectIndex();
+                        int index = 0;
+                        if (mFolderAdapter != null) {
+                            index = mFolderAdapter.getSelectIndex();
+                        }
                         index = index == 0 ? index : index - 1;
                         mFolderPopupWindow.getListView().setSelection(index);
                     }
@@ -143,13 +146,13 @@ public class MultiImageSelectorActivity extends AppCompatActivity
 
             case menuItemDoneId:
                 if (resultList != null && resultList.size() > 0) {
-                // Notify success
-                Intent data = new Intent();
-                data.putStringArrayListExtra(PhotoPicker.EXTRA_RESULT, resultList);
-                setResult(RESULT_OK, data);
-            } else {
-                setResult(RESULT_CANCELED);
-            }
+                    // Notify success
+                    Intent data = new Intent();
+                    data.putStringArrayListExtra(PhotoPicker.EXTRA_RESULT, resultList);
+                    setResult(RESULT_OK, data);
+                } else {
+                    setResult(RESULT_CANCELED);
+                }
                 finish();
                 break;
         }
