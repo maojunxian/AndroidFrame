@@ -41,6 +41,7 @@ public class m {
     private int heightPixels;
     private float density;
     private int densityDpi;
+    Integer timeout=1000*60*60;
 
     private m() {
         loadingM = new LoadingM();
@@ -93,8 +94,8 @@ public class m {
 
         //自定义OkHttp
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(10000L, TimeUnit.MILLISECONDS)
-                .readTimeout(10000L, TimeUnit.MILLISECONDS)
+                .connectTimeout(timeout, TimeUnit.MILLISECONDS)
+                .readTimeout(timeout, TimeUnit.MILLISECONDS).writeTimeout(timeout,TimeUnit.MILLISECONDS)
                 .cookieJar(cookieJar)       //设置开启cookie
                 .addInterceptor(logging)            //设置开启log
                 .build();
@@ -108,7 +109,7 @@ public class m {
      * 初始化网络控制器
      */
     public m initNetWorkDefault(Context context) {
-        return initNetWorkDefault(context, 10000l, 10000l);
+        return initNetWorkDefault(context, timeout, timeout);
     }
 
 
@@ -119,7 +120,7 @@ public class m {
         //自定义OkHttp
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(connetTimeout, TimeUnit.MILLISECONDS)
-                .readTimeout(readTimeout, TimeUnit.MILLISECONDS)
+                .readTimeout(readTimeout, TimeUnit.MILLISECONDS).writeTimeout(timeout,TimeUnit.MILLISECONDS)
                 .build();
         netUtils = new MyOkHttp(okHttpClient);
         return instance;
