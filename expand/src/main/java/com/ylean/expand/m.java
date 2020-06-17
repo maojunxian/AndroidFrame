@@ -125,7 +125,20 @@ public class m {
         netUtils = new MyOkHttp(okHttpClient);
         return instance;
 
+    } /**
+     * 初始化网络控制器
+     */
+    public m initNetWorkDefault(Context context, long connetTimeout, long readTimeout,long writeTimeout) {
+        //自定义OkHttp
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(connetTimeout, TimeUnit.MILLISECONDS)
+                .readTimeout(readTimeout, TimeUnit.MILLISECONDS).writeTimeout(writeTimeout,TimeUnit.MILLISECONDS)
+                .build();
+        netUtils = new MyOkHttp(okHttpClient);
+        return instance;
+
     }
+
 
     public void machineInformation() {
         DisplayMetrics metric = new DisplayMetrics();

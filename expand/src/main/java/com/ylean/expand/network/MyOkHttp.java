@@ -41,17 +41,13 @@ public class MyOkHttp {
      */
     public MyOkHttp(OkHttpClient okHttpClient)
     {
-        if(mOkHttpClient == null) {
             synchronized (MyOkHttp.class) {
-                if (mOkHttpClient == null) {
                     if (okHttpClient == null) {
                         mOkHttpClient = new OkHttpClient();
                     } else {
                         mOkHttpClient = okHttpClient;
                     }
-                }
             }
-        }
     }
 
     public GetBuilder get() {
